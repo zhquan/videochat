@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QZ RTC + PONG</title>
+</head>
+
+<body onload="initWebGL()">
+    <h1>QZ Realtime communication with WebRTC and Pong with OpenGL</h1>
+    <button id="startButton" onclick="onStart()">start</button>
+    <button id="callButton" onclick="onCall()">call</button>
+    <button id="hangupButton" onclick="hangup()">Hang Up</button>
+    <div>
+        <video autoplay id="localVideo"></video>
+        <video autoplay id="remoteVideo"></video>
+    </div>
+    <div id="chat">
+        <textarea id="dataChannelReceive" style="height:300px;overflow-y: scroll;"disabled></textarea>
+        <br>
+        <textarea id="dataChannelSend"
+            placeholder="Press Start, enter some text, then press Send."></textarea>
+        <div id="buttons">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/socket.js"></script>
+    <script src="js/adapter.js"></script>
+    <script src="js/index.js"></script>
+    <style>
+        body {
+            background-color: grey;
+        }
+        #dataChannelReceive, #dataChannelSend {
+            width: 100%;
+        }
+        #localPoint, #remotePoint {
+            color: white;
+            margin-right: 30px;
+            float: left;
+        }
+        .point {
+            font-size: 50px;
+        }
+        #chat {
+            width: 40%;
+            margin-right: 5%;
+            float: left;
+        }
+        #game {
+            width: 40%;
+            float: left;
+        }
+        canvas {
+            background-color: black;
+        }
+    </style>
+    <script src="js/gl-matrix-min.js"></script>
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+	    attribute vec3 aVertexColor;
+	    varying highp vec4 vColor;
+
+        uniform mat4 uMVMatrix;
+        void main(void) {
+             gl_Position = uMVMatrix * vec4(aVertexPosition, 1.0);
+	     vColor = vec4(aVertexColor, 1.0);
+        }
+    </script>
+    <script id="shader-fs" type="x-shader/x-fragment">
+	    varying highp vec4 vColor;
+        void main(void) {
+            gl_FragColor = vColor;
+        }
+    </script>
+    <script src="js/pong.js"></script>
+    <div id=game>
+        <div id=localPoint>
+            LOCAL<br>
+            <a class=point>0</a>
+        </div>
+        <div id=remotePoint>
+            REMOTE<br>
+            <a class=point>0</a>
+        </div>
+        <div id=result>
+        </div>
+        <canvas id="my-canvas" width="400" height="300">
+            Your browser does not support the HTML5 canvas element.
+        </canvas>
+    </div>
+
+    <!--
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://webrtc.github.io/adapter/adapter-latest.js"></script>
+    -->
+
+</body>
+
+</html>
